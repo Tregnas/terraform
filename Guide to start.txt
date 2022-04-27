@@ -1,0 +1,30 @@
+### Terraform practiсe bit
+### I used Centos 8 so it's necessary to remove podman to avoid conflicts with Docker
+### sudo yum remove -y podman
+
+# Installing git & docker & terraform
+sudo yum update && sudo yum install -y yum-utils
+sudo yum install -y git
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+sudo yum -y install terraform
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# Configuring Docker to start (on boot also) and gain privileges
+sudo systemctl start docker
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+# Copying example plan
+git clone https://github.com/hashicorp/learn-terraform-plan
+cd learn-terraform-plan
+tree
+terraform init
+
+# at this stage it's possible that var.secret_key is not set up, so I replaced it with string "secret", but try yourself
+terraform plan -out tfplan
+
+
+terraform show -json tfplan | jq > tfplan.json
