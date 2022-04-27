@@ -22,9 +22,14 @@ git clone https://github.com/hashicorp/learn-terraform-plan
 cd learn-terraform-plan
 tree
 terraform init
-
-# at this stage it's possible that var.secret_key is not set up, so I replaced it with string "secret", but try yourself
 terraform plan -out tfplan
 
+# at this stage it's possible that var.secret_key is not set up, so I created terraform.tfvars with the following content:
+secret_key = "TOPSECRET"
 
+
+# tfplan is an archive, but it's more useful to transform it to human-readable format
 terraform show -json tfplan | jq > tfplan.json
+
+terraform apply
+docker ps # check that containers exists
