@@ -27,9 +27,16 @@ terraform plan -out tfplan
 # at this stage it's possible that var.secret_key is not set up, so I created terraform.tfvars with the following content:
 secret_key = "TOPSECRET"
 
-
 # tfplan is an archive, but it's more useful to transform it to human-readable format
 terraform show -json tfplan | jq > tfplan.json
 
+# it's handy to review plan to check the state that would be implemented
+jq '.prior_state' tfplan.json
+
+# if you made some changes after apply it's better check what's gonna change exactly
+jq '.resource_drift' tfplan.json
+
 terraform apply
 docker ps # check that containers exists
+
+terraform destroy
